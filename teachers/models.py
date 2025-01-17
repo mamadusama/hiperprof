@@ -13,7 +13,7 @@ class Teacher(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
     age = models.PositiveIntegerField(null=True)
-    desccription = models.TextField(null=True)
+    description = models.TextField(null=True)
     hourly_price = models.DecimalField(max_digits=5, decimal_places=2, null=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)

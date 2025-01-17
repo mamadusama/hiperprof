@@ -9,7 +9,7 @@ class TeacherSerializer(serializers.ModelSerializer):
     idade = serializers.IntegerField(required=True, min_value=18, max_value=100, source="age")
     descricao = serializers.CharField(required=True, min_length=10, max_length=500, source="description")
     password_confirmation = serializers.CharField(write_only=True)
-    preco_hora = serializers.DecimalField(min_value=10, max_value=500,  required=True, source="hourly_price")
+    preco_hora = serializers.DecimalField(min_value=10, max_value=500, max_digits=5, decimal_places=2 , required=True,  source="hourly_price")
     class Meta:
         model = Teacher
         fields = (

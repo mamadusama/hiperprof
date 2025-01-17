@@ -135,3 +135,8 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = "teachers.Teacher"  # This is the custom user model that we created in the previous step
+
+REST_FRAMEWORK = {
+    "COERCE_DECIMAL_TO_STRING": False, # This is to avoid coercing Decimal fields to strings
+    
+}
