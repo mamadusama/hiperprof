@@ -13,6 +13,9 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 from decouple import config, Csv
 from dj_database_url import parse as dburl
+from datetime import timedelta
+from decouple import config
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -43,11 +46,15 @@ DJANGO_APPS = [
 
 THIRD_PARTY_APPS = [
     "rest_framework",
+    "rest_framework_simplejwt.token_blacklist",
+    "rest_framework_simplejwt",
 ]
 
 LOCAL_APPS = [
     "core.apps.CoreConfig",
     "teachers.apps.TeachersConfig",
+    "students.apps.StudentsConfig",
+    "acounts.apps.AcountsConfig",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -137,6 +144,27 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "teachers.Teacher"  # This is the custom user model that we created in the previous step
 
 REST_FRAMEWORK = {
-    "COERCE_DECIMAL_TO_STRING": False, # This is to avoid coercing Decimal fields to strings
+    "COERCE_DECIMAL_TO_STRING": False,  # This is to avoid coercing Decimal fields to strings
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
+}
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(
+        seconds=config("ACCESS_TOKEN_LIFETIME_SECONDS", cast=int)
+        
+        ),  # This is the expiration time of the access token
     
+    "REFRESH_TOKEN_LIFETIME": timedelta(
+        seconds=config("REFRESH_TOKEN_LIFETIME_SECONDS", cast=int)
+    ),  # This is the expiration time of the refresh token
+    
+    
+    "ROTATE_REFRESH_TOKENS": True,  # This is to rotate the refresh tokens
+    "BLACKLIST_AFTER_ROTATION": True,  # This is to blacklist the old refresh tokens after rotating
+    
+    "TOKEN_OBTAIN_SERIALIZER": "acounts.serializers.CustomTokenObtainPairSerializer", # This is the custom token serializer that we created in the previous step
+    "TOKEN_REFRESH_SERIALIZER": "acounts.serializers.CustomTokenRefreshSerializer", # This is the custom token serializer that we created in the previous step
+    "TOKEN_BLACKLIST_SERIALIZER": "acounts.serializers.CustomTokenBlacklistSerializer", # This is the custom token serializer that we created in the previous step
 }
