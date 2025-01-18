@@ -26,6 +26,7 @@ class TeacherSerializer(serializers.ModelSerializer):
         required=True,
         source="hourly_price",
     )
+    foto_perfil = serializers.ImageField(read_only=True, source="profile_image")
 
     class Meta:
         model = Teacher
@@ -41,6 +42,7 @@ class TeacherSerializer(serializers.ModelSerializer):
             "updated_at",
             "password",
             "password_confirmation",
+            "foto_perfil",
         )
         extra_kwargs = {
             "password": {"write_only": True},
@@ -65,3 +67,18 @@ class TeacherSerializer(serializers.ModelSerializer):
         validated_data["password"] = make_password(validated_data["password"])
 
         return super().update(instance, validated_data)
+
+
+#  serializers para foto de perfil do professor
+class TeacherProfileImageSerializer(serializers.ModelSerializer):
+    foto = serializers.ImageField(
+        required=True, write_only=True, source="profile_image"
+    )
+
+    class Meta:
+        model = Teacher
+        fields = ("foto",)
+        extra_kwargs = {
+            "profile_image": {"read_only": True},
+        }
+        # feaature de upload de imagem de perfil , depois retiro extra_kwargs caso não funcione

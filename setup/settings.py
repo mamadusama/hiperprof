@@ -153,18 +153,29 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(
         seconds=config("ACCESS_TOKEN_LIFETIME_SECONDS", cast=int)
-        
-        ),  # This is the expiration time of the access token
-    
+    ),  # This is the expiration time of the access token
     "REFRESH_TOKEN_LIFETIME": timedelta(
         seconds=config("REFRESH_TOKEN_LIFETIME_SECONDS", cast=int)
     ),  # This is the expiration time of the refresh token
-    
-    
     "ROTATE_REFRESH_TOKENS": True,  # This is to rotate the refresh tokens
     "BLACKLIST_AFTER_ROTATION": True,  # This is to blacklist the old refresh tokens after rotating
-    
-    "TOKEN_OBTAIN_SERIALIZER": "acounts.serializers.CustomTokenObtainPairSerializer", # This is the custom token serializer that we created in the previous step
-    "TOKEN_REFRESH_SERIALIZER": "acounts.serializers.CustomTokenRefreshSerializer", # This is the custom token serializer that we created in the previous step
-    "TOKEN_BLACKLIST_SERIALIZER": "acounts.serializers.CustomTokenBlacklistSerializer", # This is the custom token serializer that we created in the previous step
+    "TOKEN_OBTAIN_SERIALIZER": "acounts.serializers.CustomTokenObtainPairSerializer",  # This is the custom token serializer that we created in the previous step
+    "TOKEN_REFRESH_SERIALIZER": "acounts.serializers.CustomTokenRefreshSerializer",  # This is the custom token serializer that we created in the previous step
+    "TOKEN_BLACKLIST_SERIALIZER": "acounts.serializers.CustomTokenBlacklistSerializer",  # This is the custom token serializer that we created in the previous step
 }
+
+STATICFILES_STORAGE = "storages.backends.s3.S3Storage"
+
+
+STORAGES = {
+    "default": {"BACKEND": "storages.backends.s3boto3.S3Boto3Storage"},
+    "staticfiles": {"BACKEND": "storages.backends.s3boto3.S3Boto3Storage"},
+}
+
+AWS_ACCESS_KEY_ID = config("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = config("AWS_SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME = config("AWS_STORAGE_BUCKET_NAME")
+AWS_S3_REGION_NAME = config("AWS_S3_REGION_NAME")
+
+
+# "AWS_LOCATION": "static"

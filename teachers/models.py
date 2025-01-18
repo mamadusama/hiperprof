@@ -3,20 +3,23 @@ from django.utils import timezone
 from django.utils.timezone import now
 from django.db import models
 import uuid
+from uuid import uuid4
 
 from .managers import TeacherManager
 
 # Create your models here.
 
+def get_unique_filename(instance, filename):
+    return f"profile-image/{uuid4()}-{filename}"
 
 class Teacher(AbstractBaseUser, PermissionsMixin):
     id = models.CharField(
         primary_key=True,
         default=uuid.uuid4,  # Gera o UUID automaticamente
         editable=False,
-        max_length=36  # Formato padrão com hífens
+        max_length=36,  # Formato padrão com hífens
     )
-    
+
     email = models.EmailField(unique=True, max_length=255)
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
@@ -27,6 +30,7 @@ class Teacher(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(default=now)
     # date_joined = models.DateTimeField(timezone.now)
+    profile_image = models.ImageField(null=True,  upload_to=get_unique_filename)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
